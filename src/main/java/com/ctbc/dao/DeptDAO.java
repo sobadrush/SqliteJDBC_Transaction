@@ -21,21 +21,29 @@ public class DeptDAO {
 
 	@Autowired
 	private DataSource ds;
-	private Connection conn;
+//	private Connection conn;
 	private static final String GET_ALL_STMT = "SELECT * FROM z40180_deptTB";
 	private static final String ADD_STMT = "INSERT INTO Z40180_deptTB( dname , loc ) VALUES ( ? , ? )";
 
 	@PostConstruct
 	public void init() {
-		try {
-			System.out.println("============= DeptDAO @PostConstruct =============");
-			conn = ds.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		System.out.println("============= DeptDAO @PostConstruct =============");
+//		try {
+//			conn = ds.getConnection();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	public List<DeptVO> getAll() {
+		Connection conn = null;
+		try {
+			conn = ds.getConnection();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		List<DeptVO> dList = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -62,23 +70,31 @@ public class DeptDAO {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		return dList;
 	}
 
 	public int addDept(DeptVO deptVO) throws SQLException {
+		Connection conn = ds.getConnection();
 		PreparedStatement pstmt = null;
 		int pen = 0;
 		pstmt = conn.prepareStatement(ADD_STMT);
 		pstmt.setString(1, deptVO.getDeptName());
 		pstmt.setString(2, deptVO.getDeptLoc());
 		pen = pstmt.executeUpdate();
+		pstmt.close();
+		conn.close();
 		return pen;
 	}
 
 	@PreDestroy
 	public void destory() {
 		System.out.println("============= DeptDAO @PreDestroy =============");
-		conn = null;
+//		conn = null;
 	}
 }

@@ -53,7 +53,8 @@ public class RootConfig {
 	}
 
 	@Bean
-	public PlatformTransactionManager txManager(DataSource myDS) {
+	public PlatformTransactionManager txManager(DataSource myDS) throws SQLException {
+		System.out.println(myDS.getConnection().getMetaData().getDatabaseProductName());
 		return new DataSourceTransactionManager(myDS);
 	}
 

@@ -15,7 +15,7 @@ import com.ctbc.vo.DeptVO;
 import _00_RootConfig.RootConfig;
 
 @Service
-@Transactional
+@Transactional(transactionManager = "txManager")
 public class DeptService {
 
 	@Autowired
@@ -34,7 +34,7 @@ public class DeptService {
 		System.setProperty("spring.profiles.active", "mssql_env");  // 設定啟用的DB
 		// ===================================================================================
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
-		DeptService deptSvc = context.getBean("deptService",DeptService.class);
+		DeptService deptSvc = context.getBean("deptService", DeptService.class);
 		deptSvc.TestTransaction();
 		context.close();
 	}
