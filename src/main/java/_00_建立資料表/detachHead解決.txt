@@ -1,0 +1,25 @@
+http://www.27house.cn/archives/676
+
+https://www.youtube.com/watch?v=ftC6dbQpaZg
+
+http://garinzhang.com/git/55.html
+
+
+
+
+【git head detached 的解決】 https://tw.saowen.com/a/bd1d6e0e8da08b138ef35067306eec068389b2379feafae08cacda4096d1dba5
+
+ head detach可以理解為無頭的蒼蠅，即當前不屬於任何分枝，
+ 我們知道,git checkout本質上是修改HEAD裡面的內容來讓它指向不同分支的,而HEAD文件指向的分支就是我們當前的分支,但是有時候HEAD不會指向任何分支,
+ 嚴謹的說是HEAD指向了一個沒有分支名字的修訂版本,此時恭喜你,已經處於遊離狀態了(detached HEAD).這時候我們在進行commit操作不會提交到任何分支上去.
+ 這個時候輸入git status檢視當前狀態發現我沒有在任何本地分支上，也驗證了剛才的猜想
+ 
+	那么這時候我已經有了一個思路:
+	基於本次提交建立一個臨時分支.
+	然後merge到我當前工作分支.
+	刪除臨時分支
+	實操：
+	基於本次提交建立臨時分支
+	
+	
+	
