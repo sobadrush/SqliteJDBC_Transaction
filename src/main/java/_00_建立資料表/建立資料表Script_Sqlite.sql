@@ -9,15 +9,15 @@
 CREATE TABLE z40180_deptTB
 (
     deptno	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	dname	varchar(14),
-	loc		varchar(13)
+	dname	VARCHAR CHECK( LENGTH(dname) <= 14 ),
+	loc		VARCHAR CHECK( LENGTH(loc) <= 13 )
 );
 
 CREATE TABLE z40180_empTB
 (
     empno	 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	ename	 varchar(14),
-	job		 varchar(13),
+	ename	 varchar(14) CHECK( LENGTH(ename) <= 14 ) ,
+	job		 varchar(13) CHECK( LENGTH(job) <= 13 ),
 	hiredate  date,
 	deptno int not NULL,
 	FOREIGN KEY(deptno) REFERENCES z40180_deptTB(deptno)
@@ -25,10 +25,10 @@ CREATE TABLE z40180_empTB
 );
 
 
-insert into z40180_deptTB values (10,'財務部','臺灣台北');
-insert into z40180_deptTB values (20,'研發部','臺灣新竹');
-insert into z40180_deptTB values (30,'業務部','美國紐約');
-insert into z40180_deptTB values (40,'生管部','中國上海');
+insert into z40180_deptTB(deptno,dname,loc) values (10,'財務部','臺灣台北');
+insert into z40180_deptTB(deptno,dname,loc) values (20,'研發部','臺灣新竹');
+insert into z40180_deptTB(deptno,dname,loc) values (30,'業務部','美國紐約');
+insert into z40180_deptTB(deptno,dname,loc) values (40,'生管部','中國上海');
 
 insert into z40180_empTB(empno,ename,job,hiredate,deptno) values (7001,'king','president','1981-11-17',10);
 insert into z40180_empTB(ename,job,hiredate,deptno) values ('blake','manager','1981-05-01',30);
