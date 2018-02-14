@@ -35,9 +35,9 @@ public class DeptService_JdbcTemplate {
 
 	public static void main(String[] args) throws SQLException {
 		// ===================================================================================
-		// System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
+		 System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
 		// System.setProperty("spring.profiles.active", "mssql_env");   // 設定啟用的DB
-		System.setProperty("spring.profiles.active", "mssql_itoa");    // 設定啟用的DB
+//		System.setProperty("spring.profiles.active", "mssql_itoa");    // 設定啟用的DB
 		// ===================================================================================
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
 		DeptService_JdbcTemplate deptSvc = context.getBean("deptService_JdbcTemplate", DeptService_JdbcTemplate.class);
