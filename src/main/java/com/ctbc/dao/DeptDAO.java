@@ -88,7 +88,7 @@ public class DeptDAO {
 		pstmt.setString(2, deptVO.getDeptLoc());
 		pen = pstmt.executeUpdate();
 		pstmt.close();
-//		conn.close();
+		conn.close();
 		return pen;
 	}
 

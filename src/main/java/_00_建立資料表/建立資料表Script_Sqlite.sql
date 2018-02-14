@@ -2,8 +2,8 @@
 -- SELECT * FROM z40180_deptTB;
 -- SELECT * FROM z40180_empTB;
 ----------------------------------------------------
--- DROP TABLE z40180_empTB;
--- DROP TABLE z40180_deptTB;
+DROP TABLE z40180_empTB;
+DROP TABLE z40180_deptTB;
 ----------------------------------------------------
 
 CREATE TABLE z40180_deptTB

@@ -15,9 +15,13 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.datasource.init.DatabasePopulator;
+import org.springframework.jdbc.datasource.init.DatabasePopulatorUtils;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -36,17 +40,25 @@ public class RootConfig {
 	@Bean
 	@Profile("sqlite_env")
 	public DataSource driverManagerDatasource() {
+		System.err.println("====================【sqlite_env】===================");
 		String connectionUrl = env.getProperty("db.sqlite.url");
 		String driverClassName = env.getProperty("db.sqlite.driverClassName");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setUrl("jdbc:sqlite:" + connectionUrl);
 		ds.setDriverClassName(driverClassName);
+		
+		// 【自動Reset DB Schema...(2)】
+		//------------------------------------------------------------------
+		DatabasePopulatorUtils.execute(createDatabasePopulator(), ds);
+		//------------------------------------------------------------------
+		
 		return ds;
 	}
 
 	@Bean
 	@Profile("mssql_env")
 	public DataSource driverManagerDatasource2() {
+		System.err.println("====================【mssql_env】===================");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setUrl("jdbc:sqlserver://localhost;databaseName=DB_Emp_Dept");
 		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -58,6 +70,7 @@ public class RootConfig {
 	@Bean
 	@Profile("mssql_itoa")
 	public DataSource driverManagerDatasource3() {
+		System.err.println("====================【mssql_itoa】===================");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
 		ds.setUrl("jdbc:sqlserver://172.24.17.52:1803;databaseName=ITOA_MAIN");
 		ds.setDriverClassName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -66,9 +79,24 @@ public class RootConfig {
 		return ds;
 	}
 
+	/**
+	 *  【自動Reset DB Schema 使用JavaConfig...(1)】
+	 *  https://stackoverflow.com/questions/16038360/initialize-database-without-xml-configuration-but-using-configuration
+	 *  
+	 *  XML中使用： <jdbc:initialize-database>
+	 *  				......
+	 *  			</jdbc:initialize-database>
+	 *  https://examples.javacodegeeks.com/enterprise-java/spring/jdbc/spring-transaction-management-example-with-jdbc-example/
+	 */
+    private DatabasePopulator createDatabasePopulator() {
+        ResourceDatabasePopulator databasePopulator = new ResourceDatabasePopulator();
+        databasePopulator.setContinueOnError(true);
+        databasePopulator.addScript(new ClassPathResource("_00_建立資料表/建立資料表Script_Sqlite.sql"));
+        return databasePopulator;
+    }
+	
 	@Bean
 	public PlatformTransactionManager txManager(DataSource myDS) throws SQLException {
-		System.out.println(myDS.getConnection().getMetaData().getDatabaseProductName());
 		return new DataSourceTransactionManager(myDS);
 	}
 
@@ -86,7 +114,6 @@ public class RootConfig {
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
 		DataSource ds = context.getBean(DataSource.class);
 		JdbcTemplate jdbc = context.getBean("jdbcTemplate", JdbcTemplate.class);
-		System.out.println("jdbctemplate >>> " + jdbc);
 		try {
 			Connection conn = ds.getConnection();
 			String dbProduct = conn.getMetaData().getDatabaseProductName();
