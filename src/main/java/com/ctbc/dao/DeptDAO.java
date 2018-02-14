@@ -26,7 +26,7 @@ public class DeptDAO {
 	private static final String ADD_STMT = "INSERT INTO Z40180_deptTB( dname , loc ) VALUES ( ? , ? )";
 
 	@PostConstruct
-	public void init() {
+	private void init() {
 		System.out.println("============= DeptDAO @PostConstruct =============");
 //		try {
 //			conn = ds.getConnection();
@@ -79,7 +79,7 @@ public class DeptDAO {
 		return dList;
 	}
 
-	public int addDept(DeptVO deptVO) throws SQLException {
+	public int addDept(DeptVO deptVO)  throws SQLException {
 		Connection conn = ds.getConnection();
 		PreparedStatement pstmt = null;
 		int pen = 0;
@@ -88,7 +88,7 @@ public class DeptDAO {
 		pstmt.setString(2, deptVO.getDeptLoc());
 		pen = pstmt.executeUpdate();
 		pstmt.close();
-		conn.close();
+//		conn.close();
 		return pen;
 	}
 

@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ctbc.interfaces.I_DeptService;
 import com.ctbc.vo.DeptVO;
@@ -19,6 +22,9 @@ public class DeptService_JdbcTemplate implements I_DeptService {
 	private DeptDAO_JdbcTemplate deptDAO;
 
 	@Override
+	@Transactional(
+			propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, 
+			readOnly = false, timeout = -1, rollbackFor = SQLException.class, transactionManager = "txManager")
 	public void testTransaction() throws SQLException {
 		System.out.println("============= [TestTransaction] ==============");
 		int pen1 = deptDAO.addDept(new DeptVO("數金部", "南港"));

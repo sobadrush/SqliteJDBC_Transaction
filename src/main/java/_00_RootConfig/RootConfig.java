@@ -26,8 +26,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @PropertySource(value = { "classpath:/connectionData/db_connection.properties" }, encoding = "utf-8")
 @EnableTransactionManagement
 
-// <aop:aspectj-autoproxy proxy-target-class="true"/> 
-@EnableAspectJAutoProxy(proxyTargetClass = true) // http://zoroeye.iteye.com/blog/2230049
+// XML中使用： <aop:aspectj-autoproxy proxy-target-class="true"/> 
+@EnableAspectJAutoProxy(proxyTargetClass = true) // (1)http://zoroeye.iteye.com/blog/2230049 (2)http://jag522.iteye.com/blog/2115923
 public class RootConfig {
 
 	@Autowired
@@ -101,12 +101,12 @@ public class RootConfig {
 
 
 
-//2. 问题分析 
-//这个异常一般是代理问题，根据异常中的com.sun.proxy.$Proxy23可以判断。但是奇怪的是为什么会类型不对，
-//动态代理接口应该没有问题，于是查找工程中其他地方是否也使用了代理相关的功能。 
-//1)因为有好几个spring配置文件，就搜索有没有其他<tx:annotation-driven/>, <aop:aspectj-autoproxy/> 或<aop:config/>，
-//如果有的话就看下是否有proxy-target-class="true"的配置  ---结果没有 
-//2)查看是否有注解@Transactional的使用 -- 找到 
-//发现@Transactional是加在**DAO方法上的，但是这个DAO没有实现接口，而是继承的父DAO类。问题明确了，动态代理只能
-//代理实现了接口且是接口里定义的方法，否则就会强制使用cglib代理。即使DAO类实现的是接口，但@Transactional加在了不
-//是接口里定义的方法上，仍然会走cglib代理，本人遇到的就是这个问题。
+// 2. 问题分析 
+// 这个异常一般是代理问题，根据异常中的com.sun.proxy.$Proxy23可以判断。但是奇怪的是为什么会类型不对，
+// 动态代理接口应该没有问题，于是查找工程中其他地方是否也使用了代理相关的功能。 
+// 1)因为有好几个spring配置文件，就搜索有没有其他<tx:annotation-driven/>, <aop:aspectj-autoproxy/> 或<aop:config/>，
+// 如果有的话就看下是否有proxy-target-class="true"的配置  ---结果没有 
+// (2)查看是否有注解@Transactional的使用 -- 找到 
+// 发现@Transactional是加在**DAO方法上的，但是这个DAO没有实现接口，而是继承的父DAO类。问题明确了，动态代理只能
+// 代理实现了接口且是接口里定义的方法，否则就会强制使用cglib代理。即使DAO类实现的是接口，但@Transactional加在了不
+// 是接口里定义的方法上，仍然会走cglib代理，本人遇到的就是这个问题。
