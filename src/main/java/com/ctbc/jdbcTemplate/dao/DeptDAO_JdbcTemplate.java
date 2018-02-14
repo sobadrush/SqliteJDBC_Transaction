@@ -29,7 +29,7 @@ public class DeptDAO_JdbcTemplate {
 		return null;
 	}
 
-	public int addDept(DeptVO deptVO) throws SQLException {
+	public int addDept(DeptVO deptVO){
 		int pen = jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {

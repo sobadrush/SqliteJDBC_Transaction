@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -25,15 +26,24 @@ public class DeptService_JdbcTemplate implements I_DeptService {
 	@Transactional(
 			propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, 
 			readOnly = false, timeout = -1, rollbackFor = SQLException.class, transactionManager = "txManager")
-	public void testTransaction() throws SQLException {
+	public void testTransaction() {
 		System.out.println("============= [TestTransaction] ==============");
-		int pen1 = deptDAO.addDept(new DeptVO("數金部", "南港"));
-		int pen2 = deptDAO.addDept(new DeptVO("國防部**************************************************", "中正區"));
+		try {
+			int pen1 = deptDAO.addDept(new DeptVO("數金部", "南港"));
+			int pen2 = deptDAO.addDept(new DeptVO("國防部**************************************************", "中正區"));
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+			
+			/******************************************************
+			 * ※必須在本層拋出錯誤，AOP才會攔截到，進行Roll-back *
+			 ******************************************************/
+			throw new RuntimeException(e); 
+		}
 	}
 
 	public static void main(String[] args) throws SQLException {
 		// ===================================================================================
-		 System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
+		System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
 		// System.setProperty("spring.profiles.active", "mssql_env");   // 設定啟用的DB
 //		System.setProperty("spring.profiles.active", "mssql_itoa");    // 設定啟用的DB
 		// ===================================================================================

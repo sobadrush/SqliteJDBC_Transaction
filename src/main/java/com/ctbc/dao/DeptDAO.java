@@ -43,7 +43,7 @@ public class DeptDAO {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		List<DeptVO> dList = new ArrayList<>();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -79,7 +79,7 @@ public class DeptDAO {
 		return dList;
 	}
 
-	public int addDept(DeptVO deptVO)  throws SQLException {
+	public int addDept(DeptVO deptVO) throws SQLException {
 		Connection conn = ds.getConnection();
 		PreparedStatement pstmt = null;
 		int pen = 0;
