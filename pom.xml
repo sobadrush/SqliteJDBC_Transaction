@@ -70,18 +70,18 @@
 		</dependency>
         
         <!-- ASPECTJRT -->
-		<dependency>
-		    <groupId>org.aspectj</groupId>
-		    <artifactId>aspectjrt</artifactId>
-		    <version>1.8.13</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 		    <groupId>org.aspectj</groupId> -->
+<!-- 		    <artifactId>aspectjrt</artifactId> -->
+<!-- 		    <version>1.8.13</version> -->
+<!-- 		</dependency> -->
 		
         <!-- AOPALLIANCE -->
-		<dependency>
-		    <groupId>aopalliance</groupId>
-		    <artifactId>aopalliance</artifactId>
-		    <version>1.0</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 		    <groupId>aopalliance</groupId> -->
+<!-- 		    <artifactId>aopalliance</artifactId> -->
+<!-- 		    <version>1.0</version> -->
+<!-- 		</dependency> -->
         
         <!-- ASPECTJWEAVER -->
 		<dependency>
