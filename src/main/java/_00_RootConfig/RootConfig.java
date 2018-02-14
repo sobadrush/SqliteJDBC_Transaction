@@ -14,13 +14,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = { "com.ctbc.dao" })
+@ComponentScan(basePackages = { "com.ctbc.dao" , "com.ctbc.jdbcTemplate.dao" })
 @PropertySource(value = { "classpath:/connectionData/db_connection.properties" }, encoding = "utf-8")
 @EnableTransactionManagement
 public class RootConfig {
@@ -67,6 +68,11 @@ public class RootConfig {
 		return new DataSourceTransactionManager(myDS);
 	}
 
+	@Bean
+	public JdbcTemplate jdbcTemplate(DataSource ds){
+		return new JdbcTemplate(ds);
+	}
+	
 	public static void main(String[] args) {
 		// ===================================================================================
 		// System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
@@ -75,6 +81,8 @@ public class RootConfig {
 		// ===================================================================================
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
 		DataSource ds = context.getBean(DataSource.class);
+		JdbcTemplate jdbc = context.getBean("jdbcTemplate",JdbcTemplate.class);
+		System.out.println("jdbctemplate >>> " + jdbc);
 		try {
 			Connection conn = ds.getConnection();
 			String dbProduct = conn.getMetaData().getDatabaseProductName();

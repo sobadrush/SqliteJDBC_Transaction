@@ -1,4 +1,4 @@
-package com.ctbc.dao;
+package com.ctbc.jdbcTemplate.dao;
 
 import java.sql.SQLException;
 
@@ -15,32 +15,33 @@ import com.ctbc.vo.DeptVO;
 import _00_RootConfig.RootConfig;
 
 @Service
-public class DeptService {
+public class DeptService_JdbcTemplate {
 
 	@Autowired
-	private DeptDAO deptDAO;
+	private DeptDAO_JdbcTemplate deptDAO;
 
 	@Transactional(
 			propagation = Propagation.REQUIRED, 
 			isolation = Isolation.DEFAULT, 
 			readOnly = false, 
 			timeout = -1, 
-			rollbackFor = Exception.class)
-	public void TestTransaction() throws SQLException {
+			rollbackFor = SQLException.class, 
+			transactionManager = "txManager")
+	public void testTransaction() throws SQLException {
 		System.out.println("============= [TestTransaction] ==============");
 		int pen1 = deptDAO.addDept(new DeptVO("數金部", "南港"));
-		int pen2 = deptDAO.addDept(new DeptVO("小吃部**************************************************", "中和"));
+		int pen2 = deptDAO.addDept(new DeptVO("國防部**************************************************", "中和"));
 	}
 
 	public static void main(String[] args) throws SQLException {
 		// ===================================================================================
 		// System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
-		// System.setProperty("spring.profiles.active", "mssql_env");  // 設定啟用的DB
-		System.setProperty("spring.profiles.active", "mssql_itoa");  // 設定啟用的DB
+		// System.setProperty("spring.profiles.active", "mssql_env");   // 設定啟用的DB
+		System.setProperty("spring.profiles.active", "mssql_itoa");    // 設定啟用的DB
 		// ===================================================================================
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
-		DeptService deptSvc = context.getBean("deptService", DeptService.class);
-		deptSvc.TestTransaction();
+		DeptService_JdbcTemplate deptSvc = context.getBean("deptService_JdbcTemplate", DeptService_JdbcTemplate.class);
+		deptSvc.testTransaction();
 		context.close();
 	}
 }

@@ -19,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ctbc.dao.DeptDAO;
+import com.ctbc.dao.I_DeptDAO;
 import com.ctbc.vo.DeptVO;
 
 import _00_RootConfig.RootConfig;
@@ -27,7 +27,7 @@ import _00_RootConfig.RootConfig;
 @RunWith(SpringJUnit4ClassRunner.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @ContextConfiguration(classes = { RootConfig.class })
-@ActiveProfiles(value = { "mssql_env" }) // mssql_env / sqlite_env
+@ActiveProfiles(value = { "mssql_itoa" }) // mssql_env / sqlite_env / mssql_itoa
 public class DeptDaoTest {
 
 	@BeforeClass
@@ -53,7 +53,7 @@ public class DeptDaoTest {
 	}
 
 	@Autowired
-	private DeptDAO deptDao;
+	private I_DeptDAO deptDao;
 
 	@Autowired
 	private DataSource ds;
