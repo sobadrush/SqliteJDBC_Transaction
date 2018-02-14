@@ -21,7 +21,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan(basePackages = { "com.ctbc.dao" , "com.ctbc.jdbcTemplate.dao" })
+@ComponentScan(basePackages = { "com.ctbc.dao", "com.ctbc.jdbcTemplate.dao" })
 @PropertySource(value = { "classpath:/connectionData/db_connection.properties" }, encoding = "utf-8")
 @EnableTransactionManagement
 public class RootConfig {
@@ -35,11 +35,11 @@ public class RootConfig {
 		String connectionUrl = env.getProperty("db.sqlite.url");
 		String driverClassName = env.getProperty("db.sqlite.driverClassName");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setUrl(connectionUrl);
+		ds.setUrl("jdbc:sqlite:" + connectionUrl);
 		ds.setDriverClassName(driverClassName);
 		return ds;
 	}
-	
+
 	@Bean
 	@Profile("mssql_env")
 	public DataSource driverManagerDatasource2() {
@@ -50,7 +50,7 @@ public class RootConfig {
 		ds.setPassword("sa123456");
 		return ds;
 	}
-	
+
 	@Bean
 	@Profile("mssql_itoa")
 	public DataSource driverManagerDatasource3() {
@@ -69,19 +69,19 @@ public class RootConfig {
 	}
 
 	@Bean
-	public JdbcTemplate jdbcTemplate(DataSource ds){
+	public JdbcTemplate jdbcTemplate(DataSource ds) {
 		return new JdbcTemplate(ds);
 	}
-	
+
 	public static void main(String[] args) {
 		// ===================================================================================
-		// System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
+		System.setProperty("spring.profiles.active", "sqlite_env");  // 設定啟用的DB
 		// System.setProperty("spring.profiles.active", "mssql_env");  // 設定啟用的DB
-		System.setProperty("spring.profiles.active", "mssql_itoa");  // 設定啟用的DB
+//		System.setProperty("spring.profiles.active", "mssql_itoa");  // 設定啟用的DB
 		// ===================================================================================
 		ConfigurableApplicationContext context = new AnnotationConfigApplicationContext(RootConfig.class);
 		DataSource ds = context.getBean(DataSource.class);
-		JdbcTemplate jdbc = context.getBean("jdbcTemplate",JdbcTemplate.class);
+		JdbcTemplate jdbc = context.getBean("jdbcTemplate", JdbcTemplate.class);
 		System.out.println("jdbctemplate >>> " + jdbc);
 		try {
 			Connection conn = ds.getConnection();
