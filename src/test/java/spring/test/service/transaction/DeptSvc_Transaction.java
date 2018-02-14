@@ -27,7 +27,7 @@ public class DeptSvc_Transaction {
 	@Test
 	public void test_001() {
 		try {
-			deptSVC.TestTransaction();
+			deptSVC.testTransaction();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

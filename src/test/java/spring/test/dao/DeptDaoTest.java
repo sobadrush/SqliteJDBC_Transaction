@@ -19,7 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.ctbc.dao.I_DeptDAO;
+import com.ctbc.dao.DeptDAO;
 import com.ctbc.vo.DeptVO;
 
 import _00_RootConfig.RootConfig;
@@ -53,7 +53,7 @@ public class DeptDaoTest {
 	}
 
 	@Autowired
-	private I_DeptDAO deptDao;
+	private DeptDAO deptDao;
 
 	@Autowired
 	private DataSource ds;
