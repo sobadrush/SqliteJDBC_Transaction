@@ -44,7 +44,7 @@ public class RootConfig {
 		String connectionUrl = env.getProperty("db.sqlite.url");
 		String driverClassName = env.getProperty("db.sqlite.driverClassName");
 		DriverManagerDataSource ds = new DriverManagerDataSource();
-		ds.setUrl("jdbc:sqlite:" + connectionUrl);
+		ds.setUrl("jdbc:sqlite:" + System.getProperty("user.dir") + "/" + connectionUrl);
 		ds.setDriverClassName(driverClassName);
 		
 		// 【自動Reset DB Schema...(2)】
